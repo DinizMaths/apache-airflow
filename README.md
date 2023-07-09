@@ -69,14 +69,18 @@ task3.set_upstream([task1, task2])
 ```bash
 task1 ------>
               \
-                ------> task3
+                ------> task3 ------> task4
               /
 task2 ------>
 ```
 
 ```python
-# Only executes if a previous one task failed
+# Only executes if a previous one task failed. Will skip if no one was failed
 task3 = BashOperator(task_id="tsk3", bash_command="sleep 5", trigger_rule="one_failed")
 
+# Only executes if no one previous task was failed
+task4 = BashOperator(task_id="tsk4", bash_command="sleep 5", trigger_rule="none_failed")
+
 task3.set_upstream([task1, task2])
+task4.set_upstream(task3)
 ```
