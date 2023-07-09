@@ -124,3 +124,26 @@ task4 = BashOperator(task_id="tsk4", bash_command="sleep 5", trigger_rule="none_
 task3.set_upstream([task1, task2])
 task4.set_upstream(task3)
 ```
+
+## [Triggered DAG 4](./dags/dag_trigger_4.py)
+
+```bash
+task1 ------> task2 ------>                                 ------> task7
+                            \                             /
+                              ------> task5 ------> task6 --------> task8
+                            /                             \
+task3 ------> task4 ------>                                 ------> task9
+```
+
+```python
+task5 = BashOperator(task_id="tsk5", bash_command="sleep 5", trigger_rule="one_success")
+task9 = BashOperator(task_id="tsk9", bash_command="sleep 5", trigger_rule="one_failed")
+
+task1.set_downstream(task2)
+task3.set_downstream(task4)
+
+task5.set_upstream([task2, task4])
+
+task5.set_downstream(task6)
+task6.set_downstream([task7, task8, task9])
+```
