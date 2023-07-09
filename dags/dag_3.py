@@ -4,7 +4,7 @@ from datetime import datetime
 
 
 dag = DAG(
-  "third_dag",
+  "dag_3",
   description="My third DAG",
   schedule_interval=None,
   start_date=datetime(2023, 7, 9),
