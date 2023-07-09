@@ -96,6 +96,7 @@ task2 ------>
 
 ```python
 task1 = BashOperator(task_id="tsk1", bash_command="exit 1")
+task2 = BashOperator(task_id="tsk2", bash_command="exit 1")
 
 # Only executes if all previous tasks was failed
 task3 = BashOperator(task_id="tsk3", bash_command="sleep 5", trigger_rule="all_failed")
