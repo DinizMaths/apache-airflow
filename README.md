@@ -147,3 +147,35 @@ task5.set_upstream([task2, task4])
 task5.set_downstream(task6)
 task6.set_downstream([task7, task8, task9])
 ```
+
+## [DAG with Groups](./dags/dag_group.py)
+
+```bash
+ ---------------------                                                  -------
+| task1 ------> task2 |------>                                 ------> | task7 |
+ ---------------------         \                             /         |       |
+                                 ------> task5 ------> task6 --------> | task8 |
+                               /                             \         |       |
+task3 --------> task4 ------->                                 ------> | task9 |
+                                                                        -------
+``` 
+
+```python
+with TaskGroup("tsk_group1") as group:
+  task1 = BashOperator(task_id="tsk1", bash_command="exit 1")
+  task2 = BashOperator(task_id="tsk2", bash_command="sleep 5")
+
+with TaskGroup("tsk_group") as group:
+  task7 = BashOperator(task_id="tsk7", bash_command="sleep 5")
+  task8 = BashOperator(task_id="tsk8", bash_command="sleep 5")
+  task9 = BashOperator(task_id="tsk9", bash_command="sleep 5", trigger_rule="one_failed")
+
+
+task1.set_downstream(task2)
+task3.set_downstream(task4)
+
+task5.set_upstream([task2, task4])
+
+task5.set_downstream(task6)
+task6.set_downstream([task7, task8, task9])
+```
