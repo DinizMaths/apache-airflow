@@ -10,5 +10,6 @@ with DAG("dag_trigger_3", description="My third DAG with Trigger Rule", schedule
   task3 = BashOperator(task_id="tsk3", bash_command="sleep 5", trigger_rule="one_failed")
   task4 = BashOperator(task_id="tsk4", bash_command="sleep 5", trigger_rule="none_failed")
 
+
   task3.set_upstream([task1, task2])
   task4.set_upstream(task3)

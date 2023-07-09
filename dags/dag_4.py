@@ -9,4 +9,5 @@ with DAG("dag_4", description="My fourth DAG", schedule_interval=None, start_dat
   task2 = BashOperator(task_id="tsk2", bash_command="sleep 5")
   task3 = BashOperator(task_id="tsk3", bash_command="sleep 5")
 
+
   task3.set_upstream([task1, task2])

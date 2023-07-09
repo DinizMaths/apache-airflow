@@ -15,6 +15,7 @@ with DAG("dag_trigger_4", description="My fourth DAG with Trigger Rule", schedul
   task8 = BashOperator(task_id="tsk8", bash_command="sleep 5")
   task9 = BashOperator(task_id="tsk9", bash_command="sleep 5", trigger_rule="one_failed")
 
+
   task1.set_downstream(task2)
   task3.set_downstream(task4)
 
