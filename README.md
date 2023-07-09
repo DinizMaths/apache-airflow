@@ -75,6 +75,8 @@ task2 ------>
 ```
 
 ```python
+task1 = BashOperator(task_id="tsk1", bash_command="exit 1")
+
 # Only executes if a previous one task failed. Will skip if no one was failed
 task3 = BashOperator(task_id="tsk3", bash_command="sleep 5", trigger_rule="one_failed")
 
@@ -83,6 +85,26 @@ task3.set_upstream([task1, task2])
 ```
 
 ## [Triggered DAG 2](./dags/dag_trigger_2.py)
+
+```bash
+task1 ------>
+              \
+                ------> task3
+              /
+task2 ------>
+```
+
+```python
+task1 = BashOperator(task_id="tsk1", bash_command="exit 1")
+
+# Only executes if all previous tasks was failed
+task3 = BashOperator(task_id="tsk3", bash_command="sleep 5", trigger_rule="all_failed")
+
+
+task3.set_upstream([task1, task2])
+```
+
+## [Triggered DAG 3](./dags/dag_trigger_3.py)
 
 ```bash
 task1 ------>
@@ -101,4 +123,3 @@ task4 = BashOperator(task_id="tsk4", bash_command="sleep 5", trigger_rule="none_
 task3.set_upstream([task1, task2])
 task4.set_upstream(task3)
 ```
-
