@@ -12,13 +12,13 @@ username: airflow
 password: airflow
 ```
 
-## [First DAG](./dags/first_dag.py)
+## [DAG 1](./dags/dag_1.py)
 
 ```bash
 task1 ------> task2 ------> tsak3
 ```
 
-## [Second DAG](./dags/first_dag.py)
+## [DAG 2](./dags/dag_2.py)
 
 ```bash
         ------> task2
@@ -28,7 +28,7 @@ task1
         ------> task3
 ```
 
-## [Third DAG](./dags/first_dag.py)
+## [DAG 3](./dags/dag_3.py)
 
 ```bash
 task1 ------>
