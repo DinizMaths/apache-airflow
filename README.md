@@ -189,7 +189,7 @@ NOTE: **dag_trigger_dag_2** needs to be **unpaused**
 ```bash
  ----dag_trigger_dag_1----          ----dag_trigger_dag_2----
 |                         |        |                         |
-| task1 --------> task2 --|------> |  task1 --------> task2  |
+|  task1 -------> task2 --|------> |  task1 --------> task2  |
 |                         |        |                         |
  -------------------------          -------------------------
 ``` 
@@ -209,4 +209,15 @@ task1.set_downstream(task2)
 # dag_trigger_dag_2.py
 
 task1.set_downstream(task2)
+```
+
+## [DAG with Dict](./dags/dag_with_dict.py)
+
+```bash
+task1 ------> task2 ------> tsak3
+```
+
+```python
+task1.set_downstream(task2)
+task2.set_downstream(task3)
 ```
