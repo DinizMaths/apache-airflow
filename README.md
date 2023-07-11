@@ -3,6 +3,8 @@
 To run this project, you will need to install [Docker](https://www.docker.com/)
 
 ```bash
+sudo su
+sudo chown <USER> ./dags/
 docker-compose up -d
 ```
 To login, just:
@@ -178,4 +180,33 @@ task5.set_upstream([task2, task4])
 
 task5.set_downstream(task6)
 task6.set_downstream([task7, task8, task9])
+```
+
+## DAG that runs other DAG
+
+NOTE: **dag_trigger_dag_2** needs to be **unpaused**
+
+```bash
+ ----dag_trigger_dag_1----          ----dag_trigger_dag_2----
+|                         |        |                         |
+| task1 --------> task2 --|------> |  task1 --------> task2  |
+|                         |        |                         |
+ -------------------------          -------------------------
+``` 
+
+[Dag 1](./dags/dag_trigger_dag_1.py)
+```python
+# dag_trigger_dag_1.py
+
+task2 = TriggerDagRunOperator(task_id="tsk2", trigger_dag_id="dag_trigger_dag_2")
+
+
+task1.set_downstream(task2)
+```
+
+[Dag 2](./dags/dag_trigger_dag_2.py)
+```python
+# dag_trigger_dag_2.py
+
+task1.set_downstream(task2)
 ```
