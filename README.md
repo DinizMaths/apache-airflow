@@ -242,3 +242,49 @@ task2 = PythonOperator(task_id="tsk2", python_callable=task_read)
 
 task1.set_downstream(task2)
 ```
+
+## [DAG that sends Email](./dags/dag_email.py)
+
+You needs to open [docker-compose.yml](./docker-compose.yaml) and configure:
+```yml
+x-airflow-common:
+  [Some code here...]
+
+  environment:
+    [Some code here...]
+
+    AIRFLOW__SMTP__SMTP_HOST: smtp.gmail.com
+    AIRFLOW__SMTP__SMTP_USER: <YOUR_EMAIL>
+    AIRFLOW__SMTP__SMTP_PASSWORD: <YOUR_PASSWORD>
+    AIRFLOW__SMTP__SMTP_PORT: 587
+    AIRFLOW__SMTP__MAIL_FROM: Airflow
+```
+And reinitialize the docker-compose
+
+```bash
+task1 ------>                                 ------> send_email
+              \                             /
+                ------> task2 ------> task4 --------> task5
+              /                             \
+task2 ------>                                 ------> task6
+```
+
+
+```python
+task4 = BashOperator(task_id="tsk4", bash_command="exit 1")
+
+send_email = EmailOperator(
+  task_id="send_email",
+  to=["<EMAIL1>"],
+  subject="Airflow Error",
+  html_content="""
+  <h3>ERROR</h3>
+  <p>DAG: dag_email</p>
+  """,
+  trigger_rule="one_failed"
+)
+
+task3.set_upstream([task1, task2])
+task3.set_downstream(task4)
+task4.set_downstream([send_email, task5, task6])
+```
