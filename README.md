@@ -221,3 +221,24 @@ task1 ------> task2 ------> tsak3
 task1.set_downstream(task2)
 task2.set_downstream(task3)
 ```
+
+## [DAG with XCOM](./dags/dag_xcom.py)
+
+```bash
+task1 ------> task2
+```
+
+```python
+def task_write(**kwarg):
+  kwarg["ti"].xcom_push(key="xcom_value_1", value=10200)
+
+def task_read(**kwarg):
+  value = kwarg["ti"].xcom_pull(key="xcom_value_1")
+
+
+task1 = PythonOperator(task_id="tsk1", python_callable=task_write)
+task2 = PythonOperator(task_id="tsk2", python_callable=task_read)
+
+
+task1.set_downstream(task2)
+```
